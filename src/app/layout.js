@@ -1,5 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
+import { ClerkProvider, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import Loader from "@/components/Loader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,8 +13,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    <ClerkProvider>
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ClerkLoading>
+          <div className="fixed top-0 left-0 w-screen h-screen bg-white flex justify-center items-center">
+            {/* <p className="text-2xl font-bold text-gray-800">Loading...</p> */}
+            <Loader /> 
+          </div>
+        </ClerkLoading>
+        <ClerkLoaded>
+        <Header /> 
+        {children}
+        </ClerkLoaded>
+        </body>
     </html>
+    </ClerkProvider>
   );
 }
